@@ -4,7 +4,7 @@ from llama_index import SimpleDirectoryReader
 from llama_index import node_parser
 from llama_index.llms import OpenAI
 from llama_index.embeddings.openai import OpenAIEmbedding
-from llama_index import download_loader, service_context, VectorStoreIndex,StorageContext
+from llama_index import download_loader,ServiceContext, VectorStoreIndex,StorageContext
 from llama_index.vector_stores import PineconeVectorStore
 from llama_index.node_parser import SimpleNodeParser
 import pinecone
