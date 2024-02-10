@@ -5,9 +5,6 @@ from llama_index import QueryBundle
 from llama_index.schema import NodeWithScore
 
 
-
-
-
 class DuplicateRemoverNodePostprocessor:
     """Node postprocessor."""
 
@@ -22,9 +19,9 @@ class DuplicateRemoverNodePostprocessor:
         unique_node = []
 
         for node in nodes:
-            node_hash = node.node,hash
+            node_hash = node.node, hash
 
-            if node.hash not in  unique_hashes:
+            if node.hash not in unique_hashes:
                 unique_hashes.add(node_hash)
                 unique_node.append(node)
 

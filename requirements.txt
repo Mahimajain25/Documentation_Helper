@@ -1,6 +1,7 @@
 python-dotenv
 llama-index
 html2text
+bs4
 black
 pinecone-client
 streamlit
