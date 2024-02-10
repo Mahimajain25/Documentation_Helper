@@ -20,6 +20,7 @@ Devloper can identfy For each node of relevant content which have the symentic s
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
 ![Pinecone](https://img.shields.io/badge/Pinecone-blue?style=for-the-badge&logo=pinecone&logoColor=white)
 ![LlamaIndex](https://img.shields.io/badge/LlamaIndex-purple?style=for-the-badge&logo=pinecone&logoColor=white)
+![Open_AI](https://img.shields.io/badge/OpenAI-green?style=for-the-badge&logo=pinecone&logoColor=white)
 
 
 # **Tools used**
