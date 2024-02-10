@@ -15,11 +15,12 @@ class DuplicateRemoverNodePostprocessor:
         """Postprocess nodes."""
         print("postprocess_node enter")
 
+        # this code will remove same data/duplicate data
         unique_hashes = set()
         unique_node = []
 
         for node in nodes:
-            node_hash = node.node, hash
+            node_hash = node.node.hash
 
             if node.hash not in unique_hashes:
                 unique_hashes.add(node_hash)
