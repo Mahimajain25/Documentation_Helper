@@ -1,5 +1,7 @@
 from dotenv import load_dotenv
 import os
+
+from node_postprocessor.duplicate_postprocessing import DuplicateRemoverNodePostprocessor
 load_dotenv()
 from llama_index import VectorStoreIndex
 from llama_index.vector_stores import PineconeVectorStore
@@ -8,6 +10,12 @@ from llama_index.callbacks import LlamaDebugHandler
 from llama_index.callbacks.base import CallbackManager
 from llama_index import download_loader, ServiceContext
 import streamlit as st
+from llama_index.postprocessor import SentenceEmbeddingOptimizer
+
+
+llama_debug =  LlamaDebugHandler(print_trace_on_end=True)
+callback_manager = CallbackManager(handlers=[llama_debug])
+service_context = ServiceContext.from_defaults(callback_manager=callback_manager)
 
 @st.cache_resource(show_spinner=False)
 def get_index()->PineconeVectorStore:
@@ -37,7 +45,13 @@ def get_index()->PineconeVectorStore:
 index = get_index()
 
 if "chat_engine" not in st.session_state.keys():
-    st.session_state.chat_engine = index.as_chat_engine(chat_node = ChartMode.CONTEXT, verbose = True)
+
+    postprocessor = SentenceEmbeddingOptimizer(embed_model=service_context.embed_model, 
+                                               percentile_cutoff=0.5,
+                                               threshold_cutoff=0.7)
+    
+    st.session_state.chat_engine = index.as_chat_engine(chat_node = ChartMode.CONTEXT, verbose = True,
+                                                        postprocessor=[postprocessor,DuplicateRemoverNodePostprocessor])
 
 st.set_page_config(page_title='Chat with LlamaIndex doc,powered by LlamaIndex',
                    page_icon='&',
@@ -70,6 +84,11 @@ if st.session_state.messages[-1]['role'] != 'assistant':
         with st.spinner("Thinking..."):
             response = st.session_state.chat_engine.Chat(messages=prompt)
             st.write(response.response)
+            nodes = [node for node in response.source_nodes]
+            for col, node,i in zip(st.columns(len(nodes), nodes, range(len(nodes)))):
+                with col:
+                    st.header(f"Source Node {i+1}: score={node.score}")
+                    st.write(node.text)
             messages = {
                 'role' : 'assistant',
                 'content' : response.response
